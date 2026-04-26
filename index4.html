@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .receipt-card { background: #fff; width: 100%; max-width: 400px; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        .status-icon { width: 70px; height: 70px; background: #42b72a; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; margin: 0 auto 20px; }
+        h2 { color: #1c1e21; margin-bottom: 8px; font-size: 22px; }
+        p.subtitle { color: #606770; font-size: 14px; margin-bottom: 30px; line-height: 20px; }
+        .details { text-align: left; border-top: 1px dashed #dadde1; padding-top: 20px; }
+        .detail-item { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; }
+        .label { color: #65676b; }
+        .value { color: #1c1e21; font-weight: 600; text-align: right; margin-left: 10px; }
+        .total-box { background: #f7f8fa; padding: 15px; border-radius: 8px; margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .total-label { font-weight: bold; color: #1c1e21; }
+        .total-amount { font-size: 18px; color: #1877f2; font-weight: bold; }
+        .footer-note { margin-top: 30px; font-size: 12px; color: #bcc0c4; line-height: 18px; }
+    </style>
+</head>
+<body>
+
+    <div class="receipt-card">
+        <div class="status-icon">✓</div>
+        <h2>Transaksi Berhasil</h2>
+        <p class="subtitle">Top up sedang diproses. Mohon tunggu beberapa saat hingga Diamond masuk ke akun Anda.</p>
+        
+        <div class="details">
+            <div class="detail-item">
+                <span class="label">Player ID</span>
+                <span id="displayID" class="value">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Username</span>
+                <span id="displayUser" class="value">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Nominal</span>
+                <span id="displayItem" class="value">-</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">ID Transaksi</span>
+                <span class="value">#FF-9920831</span>
+            </div>
+            <div class="detail-item">
+                <span class="label">Status</span>
+                <span class="value" style="color: #42b72a;">Sukses</span>
+            </div>
+        </div>
+
+        <div class="total-box">
+            <span class="total-label">Total Pembayaran</span>
+            <span class="total-amount">Rp 0</span>
+        </div>
+
+        <p class="footer-note">Simpan bukti transaksi ini sebagai referensi jika ada kendala layanan.</p>
+    </div>
+
+    <script>
+        // Mengambil data dari localStorage yang disimpan di index2.html
+        window.onload = function() {
+            const playerID = localStorage.getItem("hanzz_id");
+            const username = localStorage.getItem("hanzz_user");
+            const nominal = localStorage.getItem("hanzz_item");
+
+            // Menampilkan data ke elemen HTML
+            if (playerID) document.getElementById("displayID").innerText = playerID;
+            if (username) document.getElementById("displayUser").innerText = username;
+            if (nominal) document.getElementById("displayItem").innerText = nominal;
+        };
+    </script>
+</body>
+</html>
