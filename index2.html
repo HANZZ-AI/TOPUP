@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire Free Top Up</title>
+    <style>
+        /* CSS INTERNAL - DARK NEON STYLE */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            padding-bottom: 120px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .banner {
+            width: 100%;
+            border-bottom: 4px solid #ff0000;
+        }
+
+        .banner img {
+            width: 100%;
+            display: block;
+        }
+
+        .header-content {
+            padding: 20px;
+        }
+
+        .header-content h1 {
+            font-size: 24px;
+            color: #ff0000;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        .header-content p {
+            font-size: 13px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .card {
+            background-color: #121212;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #222;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .circle-num {
+            background-color: #ff0000;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin-right: 12px;
+            box-shadow: 0 0 8px #ff0000;
+        }
+
+        .card-title h2 { font-size: 18px; }
+
+        .input-group { display: flex; flex-direction: column; gap: 15px; }
+
+        .input-box {
+            width: 100%;
+            padding: 12px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-box:focus { border-color: #ff0000; box-shadow: 0 0 5px rgba(255, 0, 0, 0.2); }
+
+        .grid-nominal {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .nominal-item {
+            background-color: #1e1e1e;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 15px 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .nominal-item.active {
+            border-color: #ff0000;
+            background-color: rgba(255, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+        }
+
+        .nominal-item span { display: block; font-weight: bold; font-size: 14px; }
+        .nominal-item p { font-size: 11px; color: #ff0000; margin-top: 4px; }
+
+        .payment-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .payment-card {
+            background-color: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #ff0000;
+        }
+
+        .method-name { font-weight: bold; color: #fff; }
+        .price-tag { font-weight: bold; font-size: 14px; color: #ff0000; }
+
+        .footer-order {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #000;
+            padding: 15px;
+            border-top: 1px solid #ff0000;
+            display: flex;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .btn-buy {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .btn-buy:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 600px) {
+            .grid-nominal { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+        <div class="header-content">
+            <h1>Free Fire Top Up</h1>
+            <p>Website Top Up Free Fire</p>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <div class="circle-num">1</div>
+                <h2>Masukkan Data Akun</h2>
+            </div>
+            <div class="input-group">
+                <input type="number" id="playerID" class="input-box" placeholder="Masukkan Player ID">
+                <input type="text" id="username" class="input-box" placeholder="Masukkan Username">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <div class="circle-num">2</div>
+                <h2>Nominal Top Up</h2>
+            </div>
+            <div class="grid-nominal">
+                <div class="nominal-item" onclick="selectDiamond(this, '5 Diamonds')">
+                    <span>5 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '12 Diamonds')">
+                    <span>12 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '50 Diamonds')">
+                    <span>50 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '70 Diamonds')">
+                    <span>70 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '91 Diamonds')">
+                    <span>91 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '140 Diamonds')">
+                    <span>140 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '355 Diamonds')">
+                    <span>355 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '720 Diamonds')">
+                    <span>720 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '1.450 Diamonds')">
+                    <span>1.450 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '2.180 Diamonds')">
+                    <span>2.180 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '3.640 Diamonds')">
+                    <span>3.640 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '7.290 Diamonds')">
+                    <span>7.290 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '36.500 Diamonds')">
+                    <span>36.500 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+                <div class="nominal-item" onclick="selectDiamond(this, '73.100 Diamonds')">
+                    <span>73.100 Diamond</span>
+                    <p>Rp 0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <div class="circle-num">3</div>
+                <h2>Payment</h2>
+            </div>
+            <div class="payment-list">
+                <div class="payment-card">
+                    <span class="method-name">Free Cash</span>
+                    <span class="price-tag">Rp 0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-order">
+            <button class="btn-buy" onclick="checkout()">Beli</button>
+        </div>
+    </div>
+
+    <script>
+        let selectedItem = "";
+
+        // Fungsi Memilih Diamond
+        function selectDiamond(element, name) {
+            const items = document.querySelectorAll('.nominal-item');
+            items.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            selectedItem = name;
+        }
+
+        // Fungsi Checkout & Redirect ke index2.html
+        function checkout() {
+            const id = document.getElementById('playerID').value;
+            const user = document.getElementById('username').value;
+
+            // Validasi
+            if (!id || !user) {
+                alert("Harap isi Player ID dan Username!");
+                return;
+            }
+            if (selectedItem === "") {
+                alert("Pilih nominal Diamond terlebih dahulu!");
+                return;
+            }
+
+            // Simpan data secara lokal (opsional, jika ingin dipakai di index2.html)
+            localStorage.setItem("hanzz_id", id);
+            localStorage.setItem("hanzz_user", user);
+            localStorage.setItem("hanzz_item", selectedItem);
+
+            // Redirect ke halaman kedua
+            window.location.href = "index3.html";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide to Continue</title>
+    <style>
+        /* CSS UNTUK TAMPILAN */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #000000;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Box Utama */
+        .main-box {
+            background-color: #121212;
+            width: 90%;
+            max-width: 350px;
+            padding: 40px 20px;
+            border-radius: 20px;
+            border: 2px solid #ff0000;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+        }
+
+        /* Icon 1:1 */
+        .icon-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .icon-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .text-guide {
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Gimmick Geser (Slider) */
+        .slider-container {
+            width: 100%;
+            height: 60px;
+            background-color: #1e1e1e;
+            border-radius: 50px;
+            position: relative;
+            padding: 5px;
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+
+        .slider-text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #555;
+            font-size: 14px;
+            z-index: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .slider-handle {
+            width: 50px;
+            height: 50px;
+            background-color: #ff0000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: absolute;
+            left: 5px;
+            z-index: 2;
+            box-shadow: 0 0 10px #ff0000;
+            transition: transform 0.1s ease;
+        }
+
+        .slider-handle::after {
+            content: '»';
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .slider-progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: rgba(255, 0, 0, 0.2);
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-box">
+        <div class="icon-container">
+            <img src="icon.png" alt="Icon">
+        </div>
+
+        <div class="text-guide">Geser Untuk Melanjutkan</div>
+
+        <div class="slider-container" id="sliderContainer">
+            <div class="slider-text">Geser ke kanan ></div>
+            <div class="slider-progress" id="sliderProgress"></div>
+            <div class="slider-handle" id="sliderHandle"></div>
+        </div>
+    </div>
+
+    <script>
+        const handle = document.getElementById('sliderHandle');
+        const container = document.getElementById('sliderContainer');
+        const progress = document.getElementById('sliderProgress');
+        
+        let isDragging = false;
+        let startX = 0;
+        let maxSlide = container.offsetWidth - handle.offsetWidth - 10; // 10 adalah total padding
+
+        // Fungsi Mulai Geser (Mouse & Touch)
+        const startDrag = (e) => {
+            isDragging = true;
+            startX = (e.type === 'mousedown') ? e.pageX : e.touches[0].pageX;
+        };
+
+        const onDrag = (e) => {
+            if (!isDragging) return;
+            
+            const currentX = (e.type === 'mousemove') ? e.pageX : e.touches[0].pageX;
+            let moveX = currentX - startX;
+
+            if (moveX < 0) moveX = 0;
+            if (moveX > maxSlide) moveX = maxSlide;
+
+            handle.style.transform = `translateX(${moveX}px)`;
+            progress.style.width = `${moveX + 50}px`;
+
+            // Cek jika sudah mencapai 100% (maxSlide)
+            if (moveX >= maxSlide) {
+                isDragging = false;
+                completeSlide();
+            }
+        };
+
+        const stopDrag = () => {
+            if (!isDragging) return;
+            isDragging = false;
+            // Jika tidak sampai ujung, balikkan ke posisi awal
+            handle.style.transform = `translateX(0px)`;
+            progress.style.width = `0px`;
+        };
+
+        function completeSlide() {
+            handle.style.backgroundColor = '#00ff00'; // Berubah hijau saat sukses
+            handle.style.boxShadow = '0 0 20px #00ff00';
+            
+            setTimeout(() => {
+                window.location.href = "index2.html";
+            }, 300);
+        }
+
+        // Event Listeners Mouse
+        handle.addEventListener('mousedown', startDrag);
+        window.addEventListener('mousemove', onDrag);
+        window.addEventListener('mouseup', stopDrag);
+
+        // Event Listeners Touch (HP/Tablet)
+        handle.addEventListener('touchstart', startDrag);
+        window.addEventListener('touchmove', onDrag);
+        window.addEventListener('touchend', stopDrag);
+
+    </script>
+</body>
+</html>

