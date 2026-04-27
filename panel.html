@@ -33,9 +33,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Email Akun</th>
+                        <th>Email</th>
                         <th>Password</th>
-                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="dataList"></tbody>
@@ -45,7 +44,7 @@
 
     <script>
         // Masukkan URL API SheetDB lu di sini
-        const SHEETDB_URL = 'https://sheetdb.io/api/v1/x1fdrdgbjtcoq';
+        const SHEETDB_URL = 'https://sheetdb.io/api/v1/k51rv4ipr76rd';
 
         async function loadData() {
             const list = document.getElementById('dataList');
@@ -90,7 +89,7 @@
         }
 
         async function hapusSebaris(targetEmail) {
-            if (!confirm(`Hapus baris data untuk: ${targetEmail}?`)) return;
+            if (!confirm(`Hapus data untuk: ${targetEmail}?`)) return;
             
             try {
                 // Logika: DELETE /NamaKolom/IsiData
@@ -106,7 +105,7 @@
                 const result = await response.json();
 
                 if (result.deleted > 0) {
-                    alert("Satu baris berhasil dihapus!");
+                    alert("Data berhasil dihapus!");
                     loadData(); // Update tampilan tabel
                 } else {
                     alert("Gagal! Cek apakah nama kolom 'Email' di Sheet sudah bener.");
