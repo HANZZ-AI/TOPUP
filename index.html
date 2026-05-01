@@ -2,15 +2,24 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Slide to Continue</title>
+    
+    <!-- PWA Meta Tags & Theme -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SlideApp">
+    <link rel="apple-touch-icon" href="logo.png">
+    
     <style>
         /* CSS UNTUK TAMPILAN */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
@@ -44,6 +53,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            background: #1e1e1e;
         }
 
         .icon-container img {
@@ -100,7 +110,9 @@
             left: 5px;
             z-index: 2;
             box-shadow: 0 0 10px #ff0000;
-            transition: transform 0.1s ease;
+            transition: transform 0.05s linear;
+            will-change: transform;
+            touch-action: none;
         }
 
         .slider-handle::after {
@@ -116,8 +128,17 @@
             top: 0;
             height: 100%;
             width: 0;
-            background: rgba(255, 0, 0, 0.2);
+            background: rgba(255, 0, 0, 0.3);
             border-radius: 50px;
+            pointer-events: none;
+        }
+        
+        /* Install PWA hint (opsional) */
+        .install-hint {
+            margin-top: 20px;
+            font-size: 10px;
+            color: #888;
+            text-align: center;
         }
     </style>
 </head>
@@ -125,7 +146,7 @@
 
     <div class="main-box">
         <div class="icon-container">
-            <img src="icon.png" alt="Icon">
+            <img src="icon.png" alt="Icon" id="appIcon">
         </div>
 
         <div class="text-guide">Geser Untuk Melanjutkan</div>
@@ -135,55 +156,89 @@
             <div class="slider-progress" id="sliderProgress"></div>
             <div class="slider-handle" id="sliderHandle"></div>
         </div>
+        <div class="install-hint">Geser Untuk Melanjutkan</div>
     </div>
 
     <script>
+        // ========== SLIDE LOGIC (Touch & Mouse) ==========
         const handle = document.getElementById('sliderHandle');
         const container = document.getElementById('sliderContainer');
         const progress = document.getElementById('sliderProgress');
         
         let isDragging = false;
         let startX = 0;
-        let maxSlide = container.offsetWidth - handle.offsetWidth - 10; // 10 adalah total padding
+        let currentTranslate = 0;
+        let maxSlide = 0;
+
+        function updateMaxSlide() {
+            if (!container || !handle) return 0;
+            const containerRect = container.getBoundingClientRect();
+            const handleWidth = handle.offsetWidth;
+            // Batas maksimal: lebar container - lebar handle - padding kiri/kanan (5px each)
+            const max = containerRect.width - handleWidth - 10;
+            return max > 0 ? max : 0;
+        }
 
         // Fungsi Mulai Geser (Mouse & Touch)
         const startDrag = (e) => {
+            e.preventDefault();
             isDragging = true;
-            startX = (e.type === 'mousedown') ? e.pageX : e.touches[0].pageX;
+            const clientX = (e.type === 'mousedown') ? e.pageX : e.touches[0].pageX;
+            startX = clientX - currentTranslate;
+            maxSlide = updateMaxSlide();
         };
 
         const onDrag = (e) => {
             if (!isDragging) return;
+            e.preventDefault();
             
-            const currentX = (e.type === 'mousemove') ? e.pageX : e.touches[0].pageX;
-            let moveX = currentX - startX;
-
-            if (moveX < 0) moveX = 0;
-            if (moveX > maxSlide) moveX = maxSlide;
-
-            handle.style.transform = `translateX(${moveX}px)`;
-            progress.style.width = `${moveX + 50}px`;
+            const clientX = (e.type === 'mousemove') ? e.pageX : e.touches[0].pageX;
+            let newTranslate = clientX - startX;
+            
+            if (newTranslate < 0) newTranslate = 0;
+            if (newTranslate > maxSlide) newTranslate = maxSlide;
+            
+            currentTranslate = newTranslate;
+            handle.style.transform = `translateX(${currentTranslate}px)`;
+            progress.style.width = `${currentTranslate + 50}px`; // +50 agar progress mengikuti handle
 
             // Cek jika sudah mencapai 100% (maxSlide)
-            if (moveX >= maxSlide) {
+            if (currentTranslate >= maxSlide && maxSlide > 0) {
                 isDragging = false;
                 completeSlide();
             }
         };
 
         const stopDrag = () => {
-            if (!isDragging) return;
+            if (!isDragging) {
+                // Reset jika belum sampai ujung, hanya jika belum complete
+                if (currentTranslate > 0 && currentTranslate < maxSlide) {
+                    resetSlider();
+                }
+                return;
+            }
             isDragging = false;
             // Jika tidak sampai ujung, balikkan ke posisi awal
+            if (currentTranslate < maxSlide) {
+                resetSlider();
+            }
+        };
+        
+        function resetSlider() {
+            currentTranslate = 0;
             handle.style.transform = `translateX(0px)`;
             progress.style.width = `0px`;
-        };
+        }
 
         function completeSlide() {
-            handle.style.backgroundColor = '#00ff00'; // Berubah hijau saat sukses
+            // Mencegah multiple complete
+            if (handle.style.backgroundColor === 'rgb(0, 255, 0)') return;
+            
+            handle.style.backgroundColor = '#00ff00';
             handle.style.boxShadow = '0 0 20px #00ff00';
             
             setTimeout(() => {
+                // Navigasi ke halaman index2.html (atau fallback)
                 window.location.href = "index2.html";
             }, 300);
         }
@@ -194,10 +249,44 @@
         window.addEventListener('mouseup', stopDrag);
 
         // Event Listeners Touch (HP/Tablet)
-        handle.addEventListener('touchstart', startDrag);
-        window.addEventListener('touchmove', onDrag);
+        handle.addEventListener('touchstart', startDrag, { passive: false });
+        window.addEventListener('touchmove', onDrag, { passive: false });
         window.addEventListener('touchend', stopDrag);
-
+        
+        // Re-calc max slide jika orientasi berubah
+        window.addEventListener('resize', () => {
+            if (!isDragging) {
+                maxSlide = updateMaxSlide();
+                resetSlider();
+            }
+        });
+        
+        // Inisialisasi maxSlide
+        setTimeout(() => {
+            maxSlide = updateMaxSlide();
+        }, 100);
+    </script>
+    
+    <!-- SERVICE WORKER REGISTRATION (Offline Support) -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').then(reg => {
+                    console.log('Service Worker registered successfully:', reg.scope);
+                }).catch(err => {
+                    console.warn('Service Worker registration failed:', err);
+                });
+            });
+        }
+        
+        // Optional: menampilkan prompt install PWA (browser support)
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Bisa tampilkan tombol install custom jika ingin, tapi biarkan default browser pun muncul
+            console.log('PWA install prompt available');
+        });
     </script>
 </body>
 </html>
